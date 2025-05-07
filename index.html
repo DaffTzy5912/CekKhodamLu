@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cek Khodam</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8e44ad;
+      --primary-light: #9b59b6;
+      --primary-dark: #6c3483;
+      --accent: #f39c12;
+      --dark: #2c3e50;
+      --light: #ecf0f1;
+      --danger: #e74c3c;
+      --success: #2ecc71;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #654ea3, #4a266a);
+      color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .header {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      font-weight: 700;
+    }
+    
+    h1 i {
+      color: var(--accent);
+      margin: 0 5px;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .input-section {
+      display: flex;
+      margin: 30px 0;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .input-wrapper {
+      position: relative;
+      flex-grow: 1;
+      max-width: 400px;
+    }
+    
+    .input-wrapper i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 18px 18px 18px 45px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.95);
+      color: var(--dark);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.3);
+    }
+    
+    button {
+      padding: 16px 30px;
+      background: linear-gradient(45deg, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(45deg, var(--primary-light), var(--primary));
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .result-section {
+      margin: 30px 0;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+    
+    .result-section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .result-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+      z-index: -1;
+    }
+    
+    .greeting {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+    
+    .khodam-name {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      margin: 15px 0;
+    }
+    
+    .khodam-icon {
+      font-size: 3rem;
+      color: var(--accent);
+      margin: 10px 0;
+    }
+    
+    .khodam-desc {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .history-section {
+      margin-top: 40px;
+      width: 100%;
+    }
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .history-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .clear-btn {
+      background: transparent;
+      color: var(--light);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      box-shadow: none;
+    }
+    
+    .clear-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: none;
+    }
+    
+    .history-list {
+      max-height: 250px;
+      overflow-y: auto;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-light) rgba(0, 0, 0, 0.1);
+    }
+    
+    .history-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .history-list::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    
+    .history-list::-webkit-scrollbar-thumb {
+      background-color: var(--primary-light);
+      border-radius: 10px;
+    }
+    
+    .empty-history {
+      padding: 20px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-style: italic;
+    }
+    
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    
+    .history-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .history-name {
+      font-weight: 600;
+    }
+    
+    .history-khodam {
+      color: var(--accent);
+      font-weight: 500;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.7;
+      width: 100%;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    
+    .pulse {
+      animation: pulse 1s infinite;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+        margin: 15px auto;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .khodam-name {
+        font-size: 1.8rem;
+      }
+      
+      .input-section {
+        flex-direction: column;
+      }
+      
+      .input-wrapper {
+        max-width: 100%;
+      }
+      
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-magic"></i> Cek Khodam <i class="fas fa-magic"></i></h1>
+      <p class="subtitle">Temukan khodam yang menjadi pendamping spiritualmu dengan sekali klik</p>
+    </div>
+    
+    <div class="input-section">
+      <div class="input-wrapper">
+        <i class="fas fa-user"></i>
+        <input type="text" id="nameInput" placeholder="Masukkan nama lengkapmu" />
+      </div>
+      <button onclick="cekKhodam()">
+        <i class="fas fa-search"></i>
+        Cek Khodam
+      </button>
+    </div>
+    
+    <div class="result-section" id="resultSection">
+      <div class="result-card">
+        <p class="greeting" id="greeting"></p>
+        <div class="khodam-icon">
+          <i class="fas fa-dragon" id="khodamIcon"></i>
+        </div>
+        <h2 class="khodam-name" id="khodamName"></h2>
+        <p class="khodam-desc" id="khodamDesc"></p>
+      </div>
+    </div>
+    
+    <div class="history-section">
+      <div class="history-header">
+        <h2 class="history-title">
+          <i class="fas fa-history"></i>
+          Riwayat Khodam
+        </h2>
+        <button class="clear-btn" onclick="clearHistory()">
+          <i class="fas fa-trash"></i> Hapus
+        </button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="empty-history" id="emptyHistory">Belum ada riwayat pencarian</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    &copy; Cek Khodam
+  </div>
+
+  <script>
+    const khodams = [
+      {
+        name: "Kucing Garong",
+        icon: "fa-cat",
+        description: "Muncul saat lapar tengah malam. Memberi keberanian buat order makanan online."
+      },
+      {
+        name: "Ular Putih Influencer",
+        icon: "fa-dragon",
+        description: "Bijak di story, tapi baperan di real life. Membantumu jadi vibes only."
+      },
+      {
+        name: "Kera Kentang Rebahan",
+        icon: "fa-monkey",
+        description: "Khodam yang ahli multitasking: bisa scroll TikTok sambil overthinking."
+      },
+      {
+        name: "Naga Hitam Server Maintenance",
+        icon: "fa-dragon",
+        description: "Muncul saat sinyal hilang. Membuatmu introspeksi sambil nunggu koneksi."
+      },
+      {
+        name: "Siluman WiFi Tetangga",
+        icon: "fa-wifi",
+        description: "Tak terlihat, tapi selalu nyambung. Khodam hemat kuota sejati."
+      },
+      {
+        name: "Buaya Darat Premium",
+        icon: "fa-heart-broken",
+        description: "Selalu tampil sopan di chat, tapi hati-hatiâ€”punya 5 tabungan perasaan."
+      },
+      {
+        name: "Jin TikTok Sound Lama",
+        icon: "fa-ghost",
+        description: "Membisikkan backsound viral dari 3 bulan lalu ke telingamu."
+      },
+      {
+        name: "Semangka Baper",
+        icon: "fa-seedling",
+        description: "Lembut di luar, lumer di dalam. Memberimu aura menenangkan tapi dramatis."
+      },
+      {
+        name: "Satria Bajaj Bonceng Tiga",
+        icon: "fa-motorcycle",
+        description: "Selalu hadir saat butuh teman pulang. Khodam solidaritas."
+      },
+      {
+        name: "Raksasa Rimba Ngantuk",
+        icon: "fa-tree",
+        description: "Besar, kuat, tapi lebih sering tidur siang. Khodam introvert sejati."
+      },
+      {
+        name: "Si Juki Galau",
+        icon: "fa-user-astronaut",
+        description: "Khodam yang selalu memberikanmu ide-ide absurd tapi kreatif di saat genting."
+      },
+      {
+        name: "Meme Man",
+        icon: "fa-user-secret",
+        description: "Selalu membisikkan kata 'Stonks' saat kamu mengambil keputusan finansial."
+      },
+      {
+        name: "Doge Keren",
+        icon: "fa-dog",
+        description: "Wow. Much protection. Very spiritual. Such loyal."
+      },
+      {
+        name: "Pepe the Frog",
+        icon: "fa-frog",
+        description: "Khodam yang selalu santai menghadapi masalah. Tenang adalah kuncinya."
+      },
+      {
+        name: "Cheems",
+        icon: "fa-dog",
+        description: "Khodam yang membantumu menemukan ketenangan dalam kegalauan."
+      },
+      {
+        name: "Troll Face",
+        icon: "fa-grin-squint-tears",
+        description: "Khodam yang mengajarimu untuk tidak terlalu serius dalam hidup."
+      },
+      {
+        name: "Success Kid",
+        icon: "fa-child",
+        description: "Khodam pembawa keberuntungan di saat-saat krusial."
+      },
+      {
+        name: "Bad Luck Brian",
+        icon: "fa-dizzy",
+        description: "Mengajarkanmu bahwa setelah kesulitan, masih ada kesulitan lagi."
+      },
+      {
+        name: "Crying Cat",
+        icon: "fa-cat",
+        description: "Menemanimu di momen-momen galau dengan playlist lagu patah hati."
+      },
+      {
+        name: "Surprised Pikachu",
+        icon: "fa-bolt",
+        description: "Muncul saat kamu kaget dengan plot twist kehidupan."
+      },
+      {
+        name: "Hide the Pain Harold",
+        icon: "fa-grimace",
+        description: "Mengajarimu untuk tetap tersenyum walau hati remuk redam."
+      },
+      {
+        name: "Distracted Boyfriend",
+        icon: "fa-eye",
+        description: "Selalu mengingatkanmu untuk fokus pada satu tujuan hidup."
+      },
+      {
+        name: "Woman Yelling at Cat",
+        icon: "fa-volume-up",
+        description: "Memberikan keberanian untuk mengungkapkan pendapatmu dengan tegas."
+      },
+      {
+        name: "Drake Hotline Bling",
+        icon: "fa-hand-point-right",
+        description: "Membantumu memilih pilihan terbaik dengan gaya yang swag."
+      },
+      {
+        name: "Roll Safe",
+        icon: "fa-brain",
+        description: "Khodam yang memberimu ide-ide cerdas yang tidak selalu berguna."
+      },
+      {
+        name: "SpongeBob Mocking",
+        icon: "fa-laugh-squint",
+        description: "Mengingatkanmu untuk tidak mengambil kritik terlalu serius."
+      },
+      {
+        name: "This is Fine Dog",
+        icon: "fa-dog",
+        description: "Membantumu tetap tenang di tengah kekacauan hidup."
+      },
+      {
+        name: "Awkward Penguin",
+        icon: "fa-feather-alt",
+        description: "Memberimu kekuatan untuk bertahan dalam situasi canggung."
+      }
+    ];
+
+    const fallbackIcons = ["fa-cat", "fa-dragon", "fa-ghost", "fa-user-astronaut", "fa-dog", "fa-laugh", "fa-meteor", "fa-star", "fa-crown"];
+
+    function getKhodamIcon(khodam) {
+      const iconClass = khodam.icon || fallbackIcons[Math.floor(Math.random() * fallbackIcons.length)];
+      
+      const testIcon = document.createElement('i');
+      testIcon.className = `fas ${iconClass}`;
+      
+      if (iconClass === "fa-snake" || iconClass === "fa-monkey" || iconClass === "fa-crocodile" || iconClass === "fa-helmet-battle") {
+        return "fa-dragon"; 
+      }
+      
+      return iconClass;
+    }
+
+    let history = JSON.parse(localStorage.getItem('khodamHistory')) || [];
+    
+    function updateHistoryDisplay() {
+      const historyList = document.getElementById('historyList');
+      const emptyHistory = document.getElementById('emptyHistory');
+      
+      if (history.length === 0) {
+        emptyHistory.style.display = 'block';
+        historyList.innerHTML = '';
+        historyList.appendChild(emptyHistory);
+        return;
+      }
+      
+      emptyHistory.style.display = 'none';
+      historyList.innerHTML = '';
+      
+      history.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+          <span class="history-name">${item.name}</span>
+          <span class="history-khodam">${item.khodam}</span>
+        `;
+        historyList.appendChild(div);
+      });
+    }
+    
+    function saveHistory() {
+      localStorage.setItem('khodamHistory', JSON.stringify(history));
+      updateHistoryDisplay();
+    }
+    
+    function clearHistory() {
+      if (confirm('Yakin ingin menghapus semua riwayat pencarian?')) {
+        history = [];
+        saveHistory();
+      }
+    }
+    
+    function getKhodamForName(name) {
+      let seed = 0;
+      for (let i = 0; i < name.length; i++) {
+        seed += name.charCodeAt(i);
+      }
+      const khodamIndex = seed % khodams.length;
+      return khodams[khodamIndex];
+    }
+    
+    function cekKhodam() {
+      const name = document.getElementById('nameInput').value.trim();
+      
+      if (!name) {
+        alert('Masukkan nama terlebih dahulu!');
+        return;
+      }
+      
+      const khodam = getKhodamForName(name);
+      
+      document.getElementById('greeting').textContent = `Hai ${name}, khodammu adalah:`;
+      document.getElementById('khodamName').textContent = khodam.name;
+      document.getElementById('khodamDesc').textContent = khodam.description || '';
+      
+      const khodamIconElement = document.getElementById('khodamIcon');
+      khodamIconElement.className = `fas ${getKhodamIcon(khodam)}`;
+      
+      const resultSection = document.getElementById('resultSection');
+      resultSection.classList.add('show');
+      khodamIconElement.classList.add('pulse');
+      
+      setTimeout(() => {
+        khodamIconElement.classList.remove('pulse');
+      }, 2000);
+      
+      history.unshift({ 
+        name: name, 
+        khodam: khodam.name 
+      });
+      
+      if (history.length > 20) {
+        history.pop();
+      }
+      
+      saveHistory();
+    }
+    
+    updateHistoryDisplay();
+    
+    document.getElementById('nameInput').addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+        cekKhodam();
+      }
+    });
+  </script>
+</body>
+</html>
