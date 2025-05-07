@@ -723,178 +723,26 @@
       
       if (history.length > 20) {
         history.pop();
-let khodams = []; // Will be populated from JSON
-const fallbackIcons = ["fa-cat", "fa-dragon", "fa-ghost", "fa-user-astronaut", "fa-dog", "fa-laugh", "fa-meteor", "fa-star", "fa-crown"];
-
-// Fetch khodam data at the start
-fetch('khodam.json')
-  .then(response => response.json())
-  .then(data => {
-    khodams = data;
-    console.log('Khodam data loaded:', data);
-  })
-  .catch(error => console.error('Gagal mengambil data khodam:', error));
-
-// Load history from localStorage immediately
-let history = JSON.parse(localStorage.getItem('khodamHistory')) || [];
-
-// Update history display as soon as the page loads
-document.addEventListener('DOMContentLoaded', function() {
-  updateHistoryDisplay();
-});
-
-function getKhodamIcon(khodam) {
-  const iconClass = khodam.icon || fallbackIcons[Math.floor(Math.random() * fallbackIcons.length)];
-  
-  // Handle unsupported icons
-  if (iconClass === "fa-snake" || iconClass === "fa-monkey" || iconClass === "fa-crocodile" || iconClass === "fa-helmet-battle") {
-    return "fa-dragon"; 
-  }
-  
-  return iconClass;
-}
-
-function updateHistoryDisplay() {
-  const historyList = document.getElementById('historyList');
-  const emptyHistory = document.getElementById('emptyHistory');
-  
-  if (!historyList || !emptyHistory) {
-    console.error('History elements not found in DOM');
-    return;
-  }
-  
-  if (history.length === 0) {
-    emptyHistory.style.display = 'block';
-    historyList.innerHTML = '';
-    historyList.appendChild(emptyHistory);
-    return;
-  }
-  
-  emptyHistory.style.display = 'none';
-  historyList.innerHTML = '';
-  
-  history.forEach((item) => {
-    const div = document.createElement('div');
-    div.className = 'history-item';
-    div.innerHTML = `
-      <span class="history-name">${item.name}</span>
-      <span class="history-khodam">${item.khodam}</span>
-    `;
-    historyList.appendChild(div);
-  });
-}
-
-function saveHistory() {
-  localStorage.setItem('khodamHistory', JSON.stringify(history));
-  // Ensure the display is updated immediately after saving
-  updateHistoryDisplay();
-}
-
-function clearHistory() {
-  if (confirm('Yakin ingin menghapus semua riwayat pencarian?')) {
-    history = [];
-    saveHistory();
-  }
-}
-
-function getKhodamForName(name) {
-  // Make sure khodams is loaded
-  if (!khodams || khodams.length === 0) {
-    console.error('Khodam data not loaded yet');
-    return {
-      name: 'Loading Error',
-      description: 'Failed to load khodam data. Please try again.'
-    };
-  }
-  
-  let seed = 0;
-  for (let i = 0; i < name.length; i++) {
-    seed += name.charCodeAt(i);
-  }
-  const khodamIndex = seed % khodams.length;
-  return khodams[khodamIndex];
-}
-
-function cekKhodam() {
-  const name = document.getElementById('nameInput').value.trim();
-  
-  if (!name) {
-    alert('Masukkan nama terlebih dahulu!');
-    return;
-  }
-  
-  const khodam = getKhodamForName(name);
-  
-  document.getElementById('greeting').textContent = `Hai ${name}, khodammu adalah:`;
-  document.getElementById('khodamName').textContent = khodam.name;
-  document.getElementById('khodamDesc').textContent = khodam.description || '';
-  
-  const khodamIconElement = document.getElementById('khodamIcon');
-  khodamIconElement.className = `fas ${getKhodamIcon(khodam)}`;
-  
-  const resultSection = document.getElementById('resultSection');
-  resultSection.classList.add('show');
-  khodamIconElement.classList.add('pulse');
-  
-  setTimeout(() => {
-    khodamIconElement.classList.remove('pulse');
-  }, 2000);
-  
-  // Add to history
-  const newEntry = { 
-    name: name, 
-    khodam: khodam.name 
-  };
-  
-  // Remove any existing entries with the same name to avoid duplicates
-  history = history.filter(item => item.name !== name);
-  
-  // Add new entry at the beginning
-  history.unshift(newEntry);
-  
-  // Limit history size
-  if (history.length > 20) {
-    history.pop();
-  }
-  
-  // Save and immediately update display
-  saveHistory();
-}
-
-// Make sure event listeners are set up when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  // Update history display on page load
-  updateHistoryDisplay();
-  
-  // Set up event listeners
-  const nameInput = document.getElementById('nameInput');
-  if (nameInput) {
-    nameInput.addEventListener('keyup', function(event) {
+      }
+      
+      saveHistory();
+    }
+    
+    updateHistoryDisplay();
+    
+    document.getElementById('nameInput').addEventListener('keyup', function(event) {
       if (event.key === 'Enter') {
         cekKhodam();
       }
     });
+    
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(registration => console.log('Service Worker registered:', registration.scope))
+        .catch(error => console.log('Service Worker registration failed:', error));
+    });
   }
-  
-  const cekButton = document.getElementById('cekButton');
-  if (cekButton) {
-    cekButton.addEventListener('click', cekKhodam);
-  }
-  
-  const clearHistoryButton = document.getElementById('clearHistoryButton');
-  if (clearHistoryButton) {
-    clearHistoryButton.addEventListener('click', clearHistory);
-  }
-});
-
-// Register service worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(registration => console.log('Service Worker registered:', registration.scope))
-      .catch(error => console.log('Service Worker registration failed:', error));
-  });
-}
 </script>
 </body>
 </html>
