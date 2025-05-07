@@ -486,263 +486,274 @@
 
   <script>
     const khodams = [
-      {
-        name: "Kucing Garong",
-        icon: "fa-cat",
-        description: "Muncul saat lapar tengah malam. Memberi keberanian buat order makanan online."
-      },
-      {
-        name: "Ular Putih Influencer",
-        icon: "fa-dragon",
-        description: "Bijak di story, tapi baperan di real life. Membantumu jadi vibes only."
-      },
-      {
-        name: "Kera Kentang Rebahan",
-        icon: "fa-monkey",
-        description: "Khodam yang ahli multitasking: bisa scroll TikTok sambil overthinking."
-      },
-      {
-        name: "Naga Hitam Server Maintenance",
-        icon: "fa-dragon",
-        description: "Muncul saat sinyal hilang. Membuatmu introspeksi sambil nunggu koneksi."
-      },
-      {
-        name: "Siluman WiFi Tetangga",
-        icon: "fa-wifi",
-        description: "Tak terlihat, tapi selalu nyambung. Khodam hemat kuota sejati."
-      },
-      {
-        name: "Buaya Darat Premium",
-        icon: "fa-heart-broken",
-        description: "Selalu tampil sopan di chat, tapi hati-hatiâ€”punya 5 tabungan perasaan."
-      },
-      {
-        name: "Jin TikTok Sound Lama",
-        icon: "fa-ghost",
-        description: "Membisikkan backsound viral dari 3 bulan lalu ke telingamu."
-      },
-      {
-        name: "Semangka Baper",
-        icon: "fa-seedling",
-        description: "Lembut di luar, lumer di dalam. Memberimu aura menenangkan tapi dramatis."
-      },
-      {
-        name: "Satria Bajaj Bonceng Tiga",
-        icon: "fa-motorcycle",
-        description: "Selalu hadir saat butuh teman pulang. Khodam solidaritas."
-      },
-      {
-        name: "Raksasa Rimba Ngantuk",
-        icon: "fa-tree",
-        description: "Besar, kuat, tapi lebih sering tidur siang. Khodam introvert sejati."
-      },
-      {
-        name: "Si Juki Galau",
-        icon: "fa-user-astronaut",
-        description: "Khodam yang selalu memberikanmu ide-ide absurd tapi kreatif di saat genting."
-      },
-      {
-        name: "Meme Man",
-        icon: "fa-user-secret",
-        description: "Selalu membisikkan kata 'Stonks' saat kamu mengambil keputusan finansial."
-      },
-      {
-        name: "Doge Keren",
-        icon: "fa-dog",
-        description: "Wow. Much protection. Very spiritual. Such loyal."
-      },
-      {
-        name: "Pepe the Frog",
-        icon: "fa-frog",
-        description: "Khodam yang selalu santai menghadapi masalah. Tenang adalah kuncinya."
-      },
-      {
-        name: "Cheems",
-        icon: "fa-dog",
-        description: "Khodam yang membantumu menemukan ketenangan dalam kegalauan."
-      },
-      {
-        name: "Troll Face",
-        icon: "fa-grin-squint-tears",
-        description: "Khodam yang mengajarimu untuk tidak terlalu serius dalam hidup."
-      },
-      {
-        name: "Success Kid",
-        icon: "fa-child",
-        description: "Khodam pembawa keberuntungan di saat-saat krusial."
-      },
-      {
-        name: "Bad Luck Brian",
-        icon: "fa-dizzy",
-        description: "Mengajarkanmu bahwa setelah kesulitan, masih ada kesulitan lagi."
-      },
-      {
-        name: "Crying Cat",
-        icon: "fa-cat",
-        description: "Menemanimu di momen-momen galau dengan playlist lagu patah hati."
-      },
-      {
-        name: "Surprised Pikachu",
-        icon: "fa-bolt",
-        description: "Muncul saat kamu kaget dengan plot twist kehidupan."
-      },
-      {
-        name: "Hide the Pain Harold",
-        icon: "fa-grimace",
-        description: "Mengajarimu untuk tetap tersenyum walau hati remuk redam."
-      },
-      {
-        name: "Distracted Boyfriend",
-        icon: "fa-eye",
-        description: "Selalu mengingatkanmu untuk fokus pada satu tujuan hidup."
-      },
-      {
-        name: "Woman Yelling at Cat",
-        icon: "fa-volume-up",
-        description: "Memberikan keberanian untuk mengungkapkan pendapatmu dengan tegas."
-      },
-      {
-        name: "Drake Hotline Bling",
-        icon: "fa-hand-point-right",
-        description: "Membantumu memilih pilihan terbaik dengan gaya yang swag."
-      },
-      {
-        name: "Roll Safe",
-        icon: "fa-brain",
-        description: "Khodam yang memberimu ide-ide cerdas yang tidak selalu berguna."
-      },
-      {
-        name: "SpongeBob Mocking",
-        icon: "fa-laugh-squint",
-        description: "Mengingatkanmu untuk tidak mengambil kritik terlalu serius."
-      },
-      {
-        name: "This is Fine Dog",
-        icon: "fa-dog",
-        description: "Membantumu tetap tenang di tengah kekacauan hidup."
-      },
-      {
-        name: "Awkward Penguin",
-        icon: "fa-feather-alt",
-        description: "Memberimu kekuatan untuk bertahan dalam situasi canggung."
-      }
-    ];
-    
-    const fallbackIcons = ["fa-cat", "fa-dragon", "fa-ghost", "fa-user-astronaut", "fa-dog", "fa-laugh", "fa-meteor", "fa-star", "fa-crown"];
-
-    function getKhodamIcon(khodam) {
-      const iconClass = khodam.icon || fallbackIcons[Math.floor(Math.random() * fallbackIcons.length)];
-      
-      const testIcon = document.createElement('i');
-      testIcon.className = `fas ${iconClass}`;
-      
-      if (iconClass === "fa-snake" || iconClass === "fa-monkey" || iconClass === "fa-crocodile" || iconClass === "fa-helmet-battle") {
-        return "fa-dragon"; 
-      }
-      
-      return iconClass;
-    }
-
-    let history = JSON.parse(localStorage.getItem('khodamHistory')) || [];
-    
-    function updateHistoryDisplay() {
-      const historyList = document.getElementById('historyList');
-      const emptyHistory = document.getElementById('emptyHistory');
-      
-      if (history.length === 0) {
-        emptyHistory.style.display = 'block';
-        historyList.innerHTML = '';
-        historyList.appendChild(emptyHistory);
-        return;
-      }
-      
-      emptyHistory.style.display = 'none';
-      historyList.innerHTML = '';
-      
-      history.forEach((item) => {
-        const div = document.createElement('div');
-        div.className = 'history-item';
-        div.innerHTML = `
-          <span class="history-name">${item.name}</span>
-          <span class="history-khodam">${item.khodam}</span>
-        `;
-        historyList.appendChild(div);
-      });
-    }
-    
-    function saveHistory() {
-      localStorage.setItem('khodamHistory', JSON.stringify(history));
-      updateHistoryDisplay();
-    }
-    
-    function clearHistory() {
-      if (confirm('Yakin ingin menghapus semua riwayat pencarian?')) {
-        history = [];
-        saveHistory();
-      }
-    }
-    
-    function getKhodamForName(name) {
-      let seed = 0;
-      for (let i = 0; i < name.length; i++) {
-        seed += name.charCodeAt(i);
-      }
-      const khodamIndex = seed % khodams.length;
-      return khodams[khodamIndex];
-    }
-    
-    function cekKhodam() {
-      const name = document.getElementById('nameInput').value.trim();
-      
-      if (!name) {
-        alert('Masukkan nama terlebih dahulu!');
-        return;
-      }
-      
-      const khodam = getKhodamForName(name);
-      
-      document.getElementById('greeting').textContent = `Hai ${name}, khodammu adalah:`;
-      document.getElementById('khodamName').textContent = khodam.name;
-      document.getElementById('khodamDesc').textContent = khodam.description || '';
-      
-      const khodamIconElement = document.getElementById('khodamIcon');
-      khodamIconElement.className = `fas ${getKhodamIcon(khodam)}`;
-      
-      const resultSection = document.getElementById('resultSection');
-      resultSection.classList.add('show');
-      khodamIconElement.classList.add('pulse');
-      
-      setTimeout(() => {
-        khodamIconElement.classList.remove('pulse');
-      }, 2000);
-      
-      history.unshift({ 
-        name: name, 
-        khodam: khodam.name 
-      });
-      
-      if (history.length > 20) {
-        history.pop();
-      }
-      
-      saveHistory();
-    }
-    
-    updateHistoryDisplay();
-    
-    document.getElementById('nameInput').addEventListener('keyup', function(event) {
-      if (event.key === 'Enter') {
-        cekKhodam();
-      }
-    });
-    
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(registration => console.log('Service Worker registered:', registration.scope))
-        .catch(error => console.log('Service Worker registration failed:', error));
-    });
+  {
+    name: "Kucing Garong",
+    icon: "fa-cat",
+    description: "Muncul saat lapar tengah malam. Memberi keberanian buat order makanan online."
+  },
+  {
+    name: "Ular Putih Influencer",
+    icon: "fa-dragon",
+    description: "Bijak di story, tapi baperan di real life. Membantumu jadi vibes only."
+  },
+  {
+    name: "Kera Kentang Rebahan",
+    icon: "fa-monkey",
+    description: "Khodam yang ahli multitasking: bisa scroll TikTok sambil overthinking."
+  },
+  {
+    name: "Naga Hitam Server Maintenance",
+    icon: "fa-dragon",
+    description: "Muncul saat sinyal hilang. Membuatmu introspeksi sambil nunggu koneksi."
+  },
+  {
+    name: "Siluman WiFi Tetangga",
+    icon: "fa-wifi",
+    description: "Tak terlihat, tapi selalu nyambung. Khodam hemat kuota sejati."
+  },
+  {
+    name: "Buaya Darat Premium",
+    icon: "fa-heart-broken",
+    description: "Selalu tampil sopan di chat, tapi hati-hatiâ€"punya 5 tabungan perasaan."
+  },
+  {
+    name: "Jin TikTok Sound Lama",
+    icon: "fa-ghost",
+    description: "Membisikkan backsound viral dari 3 bulan lalu ke telingamu."
+  },
+  {
+    name: "Semangka Baper",
+    icon: "fa-seedling",
+    description: "Lembut di luar, lumer di dalam. Memberimu aura menenangkan tapi dramatis."
+  },
+  {
+    name: "Satria Bajaj Bonceng Tiga",
+    icon: "fa-motorcycle",
+    description: "Selalu hadir saat butuh teman pulang. Khodam solidaritas."
+  },
+  {
+    name: "Raksasa Rimba Ngantuk",
+    icon: "fa-tree",
+    description: "Besar, kuat, tapi lebih sering tidur siang. Khodam introvert sejati."
+  },
+  {
+    name: "Si Juki Galau",
+    icon: "fa-user-astronaut",
+    description: "Khodam yang selalu memberikanmu ide-ide absurd tapi kreatif di saat genting."
+  },
+  {
+    name: "Meme Man",
+    icon: "fa-user-secret",
+    description: "Selalu membisikkan kata 'Stonks' saat kamu mengambil keputusan finansial."
+  },
+  {
+    name: "Doge Keren",
+    icon: "fa-dog",
+    description: "Wow. Much protection. Very spiritual. Such loyal."
+  },
+  {
+    name: "Pepe the Frog",
+    icon: "fa-frog",
+    description: "Khodam yang selalu santai menghadapi masalah. Tenang adalah kuncinya."
+  },
+  {
+    name: "Cheems",
+    icon: "fa-dog",
+    description: "Khodam yang membantumu menemukan ketenangan dalam kegalauan."
+  },
+  {
+    name: "Troll Face",
+    icon: "fa-grin-squint-tears",
+    description: "Khodam yang mengajarimu untuk tidak terlalu serius dalam hidup."
+  },
+  {
+    name: "Success Kid",
+    icon: "fa-child",
+    description: "Khodam pembawa keberuntungan di saat-saat krusial."
+  },
+  {
+    name: "Bad Luck Brian",
+    icon: "fa-dizzy",
+    description: "Mengajarkanmu bahwa setelah kesulitan, masih ada kesulitan lagi."
+  },
+  {
+    name: "Crying Cat",
+    icon: "fa-cat",
+    description: "Menemanimu di momen-momen galau dengan playlist lagu patah hati."
+  },
+  {
+    name: "Surprised Pikachu",
+    icon: "fa-bolt",
+    description: "Muncul saat kamu kaget dengan plot twist kehidupan."
+  },
+  {
+    name: "Hide the Pain Harold",
+    icon: "fa-grimace",
+    description: "Mengajarimu untuk tetap tersenyum walau hati remuk redam."
+  },
+  {
+    name: "Distracted Boyfriend",
+    icon: "fa-eye",
+    description: "Selalu mengingatkanmu untuk fokus pada satu tujuan hidup."
+  },
+  {
+    name: "Woman Yelling at Cat",
+    icon: "fa-volume-up",
+    description: "Memberikan keberanian untuk mengungkapkan pendapatmu dengan tegas."
+  },
+  {
+    name: "Drake Hotline Bling",
+    icon: "fa-hand-point-right",
+    description: "Membantumu memilih pilihan terbaik dengan gaya yang swag."
+  },
+  {
+    name: "Roll Safe",
+    icon: "fa-brain",
+    description: "Khodam yang memberimu ide-ide cerdas yang tidak selalu berguna."
+  },
+  {
+    name: "SpongeBob Mocking",
+    icon: "fa-laugh-squint",
+    description: "Mengingatkanmu untuk tidak mengambil kritik terlalu serius."
+  },
+  {
+    name: "This is Fine Dog",
+    icon: "fa-dog",
+    description: "Membantumu tetap tenang di tengah kekacauan hidup."
+  },
+  {
+    name: "Awkward Penguin",
+    icon: "fa-feather-alt",
+    description: "Memberimu kekuatan untuk bertahan dalam situasi canggung."
   }
+];
+
+const fallbackIcons = ["fa-cat", "fa-dragon", "fa-ghost", "fa-user-astronaut", "fa-dog", "fa-laugh", "fa-meteor", "fa-star", "fa-crown"];
+
+function getKhodamIcon(khodam) {
+  const iconClass = khodam.icon || fallbackIcons[Math.floor(Math.random() * fallbackIcons.length)];
+  
+  const testIcon = document.createElement('i');
+  testIcon.className = `fas ${iconClass}`;
+  
+  if (iconClass === "fa-snake" || iconClass === "fa-monkey" || iconClass === "fa-crocodile" || iconClass === "fa-helmet-battle") {
+    return "fa-dragon"; 
+  }
+  
+  return iconClass;
+}
+
+let history = JSON.parse(localStorage.getItem('khodamHistory')) || [];
+
+function updateHistoryDisplay() {
+  const historyList = document.getElementById('historyList');
+  const emptyHistory = document.getElementById('emptyHistory');
+  
+  if (history.length === 0) {
+    emptyHistory.style.display = 'block';
+    historyList.innerHTML = '';
+    historyList.appendChild(emptyHistory);
+    return;
+  }
+  
+  emptyHistory.style.display = 'none';
+  historyList.innerHTML = '';
+  
+  history.forEach((item) => {
+    const div = document.createElement('div');
+    div.className = 'history-item';
+    div.innerHTML = `
+      <span class="history-name">${item.name}</span>
+      <span class="history-khodam">${item.khodam}</span>
+    `;
+    historyList.appendChild(div);
+  });
+}
+
+function saveHistory() {
+  localStorage.setItem('khodamHistory', JSON.stringify(history));
+  updateHistoryDisplay(); // Ensure display is updated after save
+}
+
+function clearHistory() {
+  if (confirm('Yakin ingin menghapus semua riwayat pencarian?')) {
+    history = [];
+    saveHistory();
+  }
+}
+
+function getKhodamForName(name) {
+  let seed = 0;
+  for (let i = 0; i < name.length; i++) {
+    seed += name.charCodeAt(i);
+  }
+  const khodamIndex = seed % khodams.length;
+  return khodams[khodamIndex];
+}
+
+function cekKhodam() {
+  const name = document.getElementById('nameInput').value.trim();
+  
+  if (!name) {
+    alert('Masukkan nama terlebih dahulu!');
+    return;
+  }
+  
+  const khodam = getKhodamForName(name);
+  
+  document.getElementById('greeting').textContent = `Hai ${name}, khodammu adalah:`;
+  document.getElementById('khodamName').textContent = khodam.name;
+  document.getElementById('khodamDesc').textContent = khodam.description || '';
+  
+  const khodamIconElement = document.getElementById('khodamIcon');
+  khodamIconElement.className = `fas ${getKhodamIcon(khodam)}`;
+  
+  const resultSection = document.getElementById('resultSection');
+  resultSection.classList.add('show');
+  khodamIconElement.classList.add('pulse');
+  
+  setTimeout(() => {
+    khodamIconElement.classList.remove('pulse');
+  }, 2000);
+  
+  // Add to history
+  history.unshift({ 
+    name: name, 
+    khodam: khodam.name 
+  });
+  
+  if (history.length > 20) {
+    history.pop();
+  }
+  
+  // Save and update display immediately
+  saveHistory();
+  
+  // Make sure the history section is visible if it wasn't already
+  const historySection = document.getElementById('historySection');
+  if (historySection) {
+    historySection.style.display = 'block';
+  }
+}
+
+// Initialize the history display when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+  updateHistoryDisplay();
+  
+  document.getElementById('nameInput').addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+      cekKhodam();
+    }
+  });
+});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(registration => console.log('Service Worker registered:', registration.scope))
+      .catch(error => console.log('Service Worker registration failed:', error));
+  });
+}
 </script>
 </body>
 </html>
