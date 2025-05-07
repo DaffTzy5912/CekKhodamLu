@@ -4,10 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cek Khodam</title>
+  <meta name="description" content="Temukan khodam yang menjadi pendamping spiritualmu dengan sekali klik">
+  
+  <!-- PWA requirements -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#654ea3">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Cek Khodam">
+  
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png">
+  
+  <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<link rel="manifest" href="/manifest.json" />
-<link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192x192.png">
-<meta name="theme-color" content="#654ea3">
+  
   <style>
     :root {
       --primary: #8e44ad;
@@ -306,6 +321,45 @@
       width: 100%;
     }
     
+    /* Install button */
+    #installBanner {
+      position: fixed;
+      bottom: -100px;
+      left: 0;
+      right: 0;
+      background: var(--primary-dark);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+      transition: bottom 0.3s ease;
+      z-index: 1000;
+    }
+    
+    #installBanner.show {
+      bottom: 0;
+    }
+    
+    #installBanner button {
+      background: var(--accent);
+      padding: 8px 15px;
+      border-radius: 8px;
+      color: white;
+      border: none;
+      margin-left: 10px;
+    }
+    
+    #installBtn {
+      background: var(--accent);
+    }
+    
+    #closeBannerBtn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
     @keyframes pulse {
       0% {
         transform: scale(1);
@@ -320,6 +374,23 @@
     
     .pulse {
       animation: pulse 1s infinite;
+    }
+    
+    /* Offline indicator */
+    #offlineIndicator {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: var(--danger);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
     }
     
     @media (max-width: 768px) {
@@ -396,153 +467,31 @@
     </div>
   </div>
   
+  <div id="installBanner">
+    <p>Tambahkan aplikasi ke layar utama</p>
+    <div>
+      <button id="closeBannerBtn">Nanti</button>
+      <button id="installBtn">Install</button>
+    </div>
+  </div>
+  
+  <div id="offlineIndicator">
+    <i class="fas fa-wifi"></i>
+    <span>Kamu sedang offline</span>
+  </div>
+  
   <div class="footer">
     &copy; Cek Khodam
   </div>
 
   <script>
-    const khodams = [
-      {
-        name: "Kucing Garong",
-        icon: "fa-cat",
-        description: "Muncul saat lapar tengah malam. Memberi keberanian buat order makanan online."
-      },
-      {
-        name: "Ular Putih Influencer",
-        icon: "fa-dragon",
-        description: "Bijak di story, tapi baperan di real life. Membantumu jadi vibes only."
-      },
-      {
-        name: "Kera Kentang Rebahan",
-        icon: "fa-monkey",
-        description: "Khodam yang ahli multitasking: bisa scroll TikTok sambil overthinking."
-      },
-      {
-        name: "Naga Hitam Server Maintenance",
-        icon: "fa-dragon",
-        description: "Muncul saat sinyal hilang. Membuatmu introspeksi sambil nunggu koneksi."
-      },
-      {
-        name: "Siluman WiFi Tetangga",
-        icon: "fa-wifi",
-        description: "Tak terlihat, tapi selalu nyambung. Khodam hemat kuota sejati."
-      },
-      {
-        name: "Buaya Darat Premium",
-        icon: "fa-heart-broken",
-        description: "Selalu tampil sopan di chat, tapi hati-hatiâ€”punya 5 tabungan perasaan."
-      },
-      {
-        name: "Jin TikTok Sound Lama",
-        icon: "fa-ghost",
-        description: "Membisikkan backsound viral dari 3 bulan lalu ke telingamu."
-      },
-      {
-        name: "Semangka Baper",
-        icon: "fa-seedling",
-        description: "Lembut di luar, lumer di dalam. Memberimu aura menenangkan tapi dramatis."
-      },
-      {
-        name: "Satria Bajaj Bonceng Tiga",
-        icon: "fa-motorcycle",
-        description: "Selalu hadir saat butuh teman pulang. Khodam solidaritas."
-      },
-      {
-        name: "Raksasa Rimba Ngantuk",
-        icon: "fa-tree",
-        description: "Besar, kuat, tapi lebih sering tidur siang. Khodam introvert sejati."
-      },
-      {
-        name: "Si Juki Galau",
-        icon: "fa-user-astronaut",
-        description: "Khodam yang selalu memberikanmu ide-ide absurd tapi kreatif di saat genting."
-      },
-      {
-        name: "Meme Man",
-        icon: "fa-user-secret",
-        description: "Selalu membisikkan kata 'Stonks' saat kamu mengambil keputusan finansial."
-      },
-      {
-        name: "Doge Keren",
-        icon: "fa-dog",
-        description: "Wow. Much protection. Very spiritual. Such loyal."
-      },
-      {
-        name: "Pepe the Frog",
-        icon: "fa-frog",
-        description: "Khodam yang selalu santai menghadapi masalah. Tenang adalah kuncinya."
-      },
-      {
-        name: "Cheems",
-        icon: "fa-dog",
-        description: "Khodam yang membantumu menemukan ketenangan dalam kegalauan."
-      },
-      {
-        name: "Troll Face",
-        icon: "fa-grin-squint-tears",
-        description: "Khodam yang mengajarimu untuk tidak terlalu serius dalam hidup."
-      },
-      {
-        name: "Success Kid",
-        icon: "fa-child",
-        description: "Khodam pembawa keberuntungan di saat-saat krusial."
-      },
-      {
-        name: "Bad Luck Brian",
-        icon: "fa-dizzy",
-        description: "Mengajarkanmu bahwa setelah kesulitan, masih ada kesulitan lagi."
-      },
-      {
-        name: "Crying Cat",
-        icon: "fa-cat",
-        description: "Menemanimu di momen-momen galau dengan playlist lagu patah hati."
-      },
-      {
-        name: "Surprised Pikachu",
-        icon: "fa-bolt",
-        description: "Muncul saat kamu kaget dengan plot twist kehidupan."
-      },
-      {
-        name: "Hide the Pain Harold",
-        icon: "fa-grimace",
-        description: "Mengajarimu untuk tetap tersenyum walau hati remuk redam."
-      },
-      {
-        name: "Distracted Boyfriend",
-        icon: "fa-eye",
-        description: "Selalu mengingatkanmu untuk fokus pada satu tujuan hidup."
-      },
-      {
-        name: "Woman Yelling at Cat",
-        icon: "fa-volume-up",
-        description: "Memberikan keberanian untuk mengungkapkan pendapatmu dengan tegas."
-      },
-      {
-        name: "Drake Hotline Bling",
-        icon: "fa-hand-point-right",
-        description: "Membantumu memilih pilihan terbaik dengan gaya yang swag."
-      },
-      {
-        name: "Roll Safe",
-        icon: "fa-brain",
-        description: "Khodam yang memberimu ide-ide cerdas yang tidak selalu berguna."
-      },
-      {
-        name: "SpongeBob Mocking",
-        icon: "fa-laugh-squint",
-        description: "Mengingatkanmu untuk tidak mengambil kritik terlalu serius."
-      },
-      {
-        name: "This is Fine Dog",
-        icon: "fa-dog",
-        description: "Membantumu tetap tenang di tengah kekacauan hidup."
-      },
-      {
-        name: "Awkward Penguin",
-        icon: "fa-feather-alt",
-        description: "Memberimu kekuatan untuk bertahan dalam situasi canggung."
-      }
-    ];
+    fetch('khodam.json')
+  .then(response => response.json())
+  .then(data => {
+    // Gunakan data di sini
+    console.log(data);
+  })
+  .catch(error => console.error('Gagal mengambil data khodam:', error));
 
     const fallbackIcons = ["fa-cat", "fa-dragon", "fa-ghost", "fa-user-astronaut", "fa-dog", "fa-laugh", "fa-meteor", "fa-star", "fa-crown"];
 
@@ -660,5 +609,3 @@
     });
   }
 </script>
-</body>
-</html>
