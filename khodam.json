@@ -1,7 +1,0 @@
-fetch('khodam.json')
-  .then(response => response.json())
-  .then(data => {
-    // Gunakan data di sini
-    console.log(data);
-  })
-  .catch(error => console.error('Gagal mengambil data khodam:', error));
